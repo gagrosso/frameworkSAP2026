@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Framework de Decisión SAP 2026 | TeGeVe</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  /* Force full-width even if GitHub wraps in a container */
+  html, body {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 16px !important;
+    -webkit-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+    overflow-x: hidden;
+  }
+
+  /* Override any GitHub/Jekyll parent container */
+  .container, .container-lg, .markdown-body, .page-content, main, article {
+    max-width: none !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: inherit !important;
+  }
+
+  /* Scale up for very large screens */
+  @media (min-width: 1400px) {
+    html { font-size: 18px !important; }
+  }
+
+  @media (min-width: 1800px) {
+    html { font-size: 20px !important; }
+  }
+
+  :root {
+    --red: #e30613;
+    --red-dark: #b8050f;
+    --red-light: rgba(227, 6, 19, 0.08);
+    --gray: #4a4a49;
+    --gray-dark: #2a2a29;
+    --gray-medium: #6a6a69;
+    --gray-light: #f5f4f2;
+    --white: #ffffff;
+    --bg-hero: #1a1a19;
+    --bg-section-alt: #f8f7f5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  [id] { scroll-margin-top: 110px; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--gray-dark);
+    background: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    transition: all 0.3s;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+  }
+
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0.6rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo img {
+    height: 82px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    align-items: center;
+  }
+
+  .nav-links a {
+    color: var(--gray);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    transition: color 0.25s;
+  }
+
+  .nav-links a:hover { color: var(--red); }
+
+  .nav-cta {
+    background: var(--red);
+    color: var(--white) !important;
+    padding: 0.55rem 1.4rem;
+    border-radius: 4px;
+    font-weight: 700 !important;
+    transition: background 0.25s !important;
+  }
+
+  .nav-cta:hover { background: var(--red-dark) !important; }
+
+  .mobile-menu {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .mobile-menu span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--gray-dark);
+    margin: 5px 0;
+    transition: 0.3s;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: var(--bg-hero);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding-top: 100px;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 800px;
+    height: 800px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(227,6,19,0.12) 0%, transparent 70%);
+    animation: pulse 6s ease-in-out infinite;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.15); opacity: 1; }
+  }
+
+  .hero-inner {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  /* Scale up for very large screens */
+  @media (min-width: 1600px) {
+    .hero-inner, .section-inner, .stats-inner, .cta-inner {
+      max-width: 1500px;
+    }
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(227,6,19,0.12);
+    border: 1px solid rgba(227,6,19,0.3);
+    color: var(--red);
+    padding: 0.5rem 1.1rem;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.8rem;
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+    animation: blink 1.5s infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 6vw, 5.2rem);
+    line-height: 0.95;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.01em;
+    animation: fadeInUp 0.6s ease-out 0.1s both;
+  }
+
+  .hero h1 span { color: var(--red); }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    max-width: 520px;
+    animation: fadeInUp 0.6s ease-out 0.2s both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    animation: fadeInUp 0.6s ease-out 0.3s both;
+  }
+
+  .btn-primary {
+    background: var(--red);
+    color: var(--white);
+    padding: 0.9rem 2.2rem;
+    border: none;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-primary:hover {
+    background: var(--red-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(227,6,19,0.3);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--white);
+    padding: 0.9rem 2.2rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .btn-secondary:hover {
+    border-color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.05);
+  }
+
+  /* Hero timeline card */
+  .hero-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 2.5rem;
+    animation: fadeInUp 0.6s ease-out 0.4s both;
+  }
+
+  .hero-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.1em;
+    margin-bottom: 2rem;
+  }
+
+  .timeline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    margin-bottom: 1.8rem;
+    position: relative;
+  }
+
+  .timeline-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 18px;
+    top: 42px;
+    bottom: -18px;
+    width: 1px;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .timeline-dot {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .timeline-dot.urgent {
+    background: rgba(227,6,19,0.15);
+    color: var(--red);
+    border: 1px solid rgba(227,6,19,0.3);
+  }
+
+  .timeline-dot.critical {
+    background: var(--red);
+    color: white;
+    animation: blink 2s infinite;
+  }
+
+  .timeline-dot.warning {
+    background: rgba(255,180,0,0.15);
+    color: #ffb400;
+    border: 1px solid rgba(255,180,0,0.3);
+  }
+
+  .timeline-content h4 {
+    color: var(--white);
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .timeline-content p {
+    color: rgba(255,255,255,0.45);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: var(--white);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding: 3rem 2rem;
+  }
+
+  .stats-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .stat-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--red);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-label {
+    font-size: 0.82rem;
+    color: var(--gray-medium);
+    line-height: 1.4;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 6rem 2rem;
+  }
+
+  .section-alt { background: var(--bg-section-alt); }
+  .section-dark { background: var(--bg-hero); color: white; }
+
+  .section-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 0.8rem;
+  }
+
+  .section-dark .section-label { opacity: 0.9; }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1;
+    margin-bottom: 1rem;
+    color: var(--gray-dark);
+  }
+
+  .section-dark .section-title { color: var(--white); }
+
+  .section-desc {
+    font-size: 1.05rem;
+    color: var(--gray-medium);
+    line-height: 1.7;
+    max-width: 640px;
+    margin-bottom: 3rem;
+  }
+
+  .section-dark .section-desc { color: rgba(255,255,255,0.5); }
+
+  /* ── ROUTES GRID ── */
+  .routes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .route-card {
+    background: var(--white);
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 10px;
+    padding: 2.2rem;
+    transition: all 0.35s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .route-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gray-medium);
+    transition: background 0.35s;
+  }
+
+  .route-card.recommended::before { background: var(--red); }
+
+  .route-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  }
+
+  .route-card.recommended {
+    border-color: rgba(227,6,19,0.15);
+    background: linear-gradient(180deg, rgba(227,6,19,0.02) 0%, white 40%);
+  }
+
+  .route-percent {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    color: var(--gray);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .route-card.recommended .route-percent { color: var(--red); }
+
+  .route-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.2rem;
+  }
+
+  .route-type {
+    font-size: 0.8rem;
+    color: var(--gray-medium);
+    margin-bottom: 1.2rem;
+    font-style: italic;
+  }
+
+  .route-desc {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--gray);
+  }
+
+  .route-rec-badge {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: 100px;
+    margin-bottom: 1rem;
+  }
+
+  /* ── BIG 4 SECTION ── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .compare-card {
+    border-radius: 10px;
+    padding: 2.5rem;
+    position: relative;
+  }
+
+  .compare-card.what-pay {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .compare-card.what-get {
+    background: rgba(227,6,19,0.08);
+    border: 1px solid rgba(227,6,19,0.15);
+  }
+
+  .compare-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .compare-card.what-pay h3 { color: rgba(255,255,255,0.6); }
+  .compare-card.what-get h3 { color: var(--red); }
+
+  .compare-list {
+    list-style: none;
+  }
+
+  .compare-list li {
+    padding: 0.6rem 0;
+    font-size: 0.92rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    line-height: 1.5;
+  }
+
+  .compare-card.what-pay .compare-list li { color: rgba(255,255,255,0.55); }
+  .compare-card.what-get .compare-list li { color: rgba(255,255,255,0.75); }
+
+  .compare-list li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .compare-card.what-pay .compare-list li::before { background: rgba(255,255,255,0.2); }
+  .compare-card.what-get .compare-list li::before { background: var(--red); }
+
+  .impact-banner {
+    margin-top: 2rem;
+    background: var(--red);
+    border-radius: 8px;
+    padding: 1.5rem 2rem;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: white;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── CLEAN CORE ── */
+  .clean-core-visual {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem;
+    align-items: center;
+    margin-top: 2rem;
+  }
+
+  .core-box {
+    border-radius: 12px;
+    padding: 2.5rem;
+    text-align: center;
+  }
+
+  .core-box.s4 {
+    background: var(--gray-dark);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .core-box.btp {
+    background: var(--red);
+  }
+
+  .core-box h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    color: white;
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.05em;
+  }
+
+  .core-box p {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.6;
+  }
+
+  .api-bridge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .api-bridge span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: var(--gray-medium);
+    letter-spacing: 0.1em;
+  }
+
+  .api-dots {
+    display: flex;
+    gap: 4px;
+  }
+
+  .api-dots i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+    opacity: 0.4;
+    animation: dotPulse 1.5s infinite;
+  }
+
+  .api-dots i:nth-child(2) { animation-delay: 0.15s; }
+  .api-dots i:nth-child(3) { animation-delay: 0.3s; }
+  .api-dots i:nth-child(4) { animation-delay: 0.45s; }
+  .api-dots i:nth-child(5) { animation-delay: 0.6s; }
+
+  @keyframes dotPulse {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+  }
+
+  .principle-box {
+    margin-top: 2.5rem;
+    background: var(--red-light);
+    border-left: 4px solid var(--red);
+    padding: 1.5rem 2rem;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .principle-box p {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gray-dark);
+  }
+
+  /* ── PHASES ── */
+  .phase-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .phase-card {
+    background: var(--white);
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 10px;
+    padding: 2.5rem;
+    position: relative;
+  }
+
+  .phase-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    color: rgba(227,6,19,0.08);
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    line-height: 1;
+  }
+
+  .phase-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+    color: var(--gray-dark);
+  }
+
+  .phase-card .phase-sub {
+    color: var(--red);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+
+  .phase-steps {
+    list-style: none;
+  }
+
+  .phase-steps li {
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    font-size: 0.9rem;
+    color: var(--gray);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    line-height: 1.5;
+  }
+
+  .phase-steps li:last-child { border: none; }
+
+  .step-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+
+  .step-tag.keep { background: rgba(0,160,75,0.1); color: #00a04b; }
+  .step-tag.drop { background: rgba(227,6,19,0.1); color: var(--red); }
+  .step-tag.decouple { background: rgba(0,120,200,0.1); color: #0078c8; }
+  .step-tag.clean { background: rgba(227,6,19,0.1); color: var(--red); }
+  .step-tag.ux { background: rgba(0,120,200,0.1); color: #0078c8; }
+  .step-tag.ams { background: rgba(0,160,75,0.1); color: #00a04b; }
+  .step-tag.finops { background: rgba(255,180,0,0.15); color: #c88f00; }
+
+  /* ── CHECKLIST ── */
+  .checklist-categories {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .checklist-cat {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 2rem;
+  }
+
+  .checklist-cat h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: var(--red);
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+
+  .checklist-cat ul {
+    list-style: none;
+  }
+
+  .checklist-cat li {
+    padding: 0.5rem 0;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+
+  .checklist-cat li::before { display: none; }
+
+  .check-input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    margin-top: 1px;
+  }
+
+  .check-input:hover { border-color: var(--red); }
+
+  .check-input:checked {
+    background: var(--red);
+    border-color: var(--red);
+  }
+
+  .check-input:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .checklist-cat li.checked {
+    color: rgba(255,255,255,0.85);
+  }
+
+  .checklist-counter {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1.2rem 2rem;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: all 0.4s;
+  }
+
+  .checklist-counter .count-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    line-height: 1;
+    color: var(--red);
+    transition: color 0.4s;
+  }
+
+  .checklist-counter .count-label {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.4);
+    margin-top: 0.2rem;
+  }
+
+  .interp-card {
+    transition: all 0.4s ease;
+    opacity: 0.25;
+    transform: scale(0.95);
+    filter: grayscale(0.5);
+  }
+
+  .interp-card.active {
+    opacity: 1;
+    transform: scale(1.06);
+    filter: grayscale(0);
+  }
+
+  .interp-card.active.green { box-shadow: 0 0 40px rgba(0,160,75,0.35), inset 0 0 0 2px rgba(0,160,75,0.5); }
+  .interp-card.active.yellow { box-shadow: 0 0 40px rgba(255,180,0,0.35), inset 0 0 0 2px rgba(255,180,0,0.5); }
+  .interp-card.active.red-i { box-shadow: 0 0 40px rgba(227,6,19,0.35), inset 0 0 0 2px rgba(227,6,19,0.5); }
+
+  .interpretation-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .interp-card {
+    border-radius: 12px;
+    padding: 2.2rem 1.8rem;
+    text-align: center;
+  }
+
+  .interp-card.green {
+    background: rgba(0,160,75,0.1);
+    border: 2px solid rgba(0,160,75,0.2);
+  }
+
+  .interp-card.yellow {
+    background: rgba(255,180,0,0.1);
+    border: 2px solid rgba(255,180,0,0.2);
+  }
+
+  .interp-card.red-i {
+    background: rgba(227,6,19,0.1);
+    border: 2px solid rgba(227,6,19,0.2);
+  }
+
+  .interp-card h5 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .interp-card.green h5 { color: #00a04b; }
+  .interp-card.yellow h5 { color: #c88f00; }
+  .interp-card.red-i h5 { color: var(--red); }
+
+  .interp-card p {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.5;
+  }
+
+  .interp-card.active p {
+    color: rgba(255,255,255,0.8);
+  }
+
+  /* ── TGV SECTION ── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .service-card {
+    background: var(--white);
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 10px;
+    padding: 2rem;
+    transition: all 0.35s;
+  }
+
+  .service-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+  }
+
+  .service-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+    font-size: 1.3rem;
+  }
+
+  .service-icon.red-bg { background: rgba(227,6,19,0.08); }
+  .service-icon.gray-bg { background: rgba(74,74,73,0.08); }
+
+  .service-card h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    margin-bottom: 0.6rem;
+    color: var(--gray-dark);
+    letter-spacing: 0.03em;
+  }
+
+  .service-card p {
+    font-size: 0.85rem;
+    color: var(--gray-medium);
+    line-height: 1.6;
+  }
+
+  /* ── METRICS ── */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .metric-card {
+    text-align: center;
+    padding: 2rem;
+    background: var(--bg-section-alt);
+    border-radius: 10px;
+  }
+
+  .metric-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    color: var(--red);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .metric-label {
+    font-size: 0.88rem;
+    color: var(--gray);
+    line-height: 1.4;
+  }
+
+  /* ── CTA FINAL ── */
+  .cta-section {
+    background: var(--bg-hero);
+    padding: 6rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(227,6,19,0.1) 0%, transparent 70%);
+  }
+
+  .cta-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .cta-section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 1.2rem;
+  }
+
+  .cta-section h2 span { color: var(--red); }
+
+  .cta-section p {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+  }
+
+  .cta-contact {
+    margin-top: 2.5rem;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.9rem;
+    line-height: 1.8;
+  }
+
+  .cta-contact a {
+    color: var(--white);
+    text-decoration: none;
+    transition: color 0.25s;
+  }
+
+  .cta-contact a:hover { color: var(--red); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--gray-dark);
+    padding: 2rem;
+    text-align: center;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.3);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  footer a {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+  }
+
+  /* ── CHARTS ── */
+  .chart-wrapper {
+    background: rgba(26,26,25,0.6);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-top: 2.5rem;
+  }
+
+  .chart-wrapper h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.1em;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    height: 300px;
+  }
+
+  .chart-container-bar {
+    position: relative;
+    width: 100%;
+    max-width: 550px;
+    margin: 0 auto;
+    height: 220px;
+  }
+
+  /* Talent section */
+  .talent-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .talent-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .talent-stat-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(227,6,19,0.2);
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .talent-stat-card .ts-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .talent-stat-card .ts-label {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.3;
+  }
+
+  /* Contact buttons */
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+
+  .btn-whatsapp {
+    background: #25d366;
+    color: white;
+    padding: 0.9rem 2rem;
+    border: none;
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .btn-whatsapp:hover {
+    background: #1da851;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37,211,102,0.3);
+  }
+
+  .btn-email {
+    background: transparent;
+    color: white;
+    padding: 0.9rem 2rem;
+    border: 2px solid rgba(255,255,255,0.25);
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .btn-email:hover {
+    border-color: var(--red);
+    background: rgba(227,6,19,0.1);
+    transform: translateY(-2px);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 960px) {
+    .talent-grid { grid-template-columns: 1fr; }
+    .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .routes-grid { grid-template-columns: 1fr; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .phase-grid { grid-template-columns: 1fr; }
+    .checklist-categories { grid-template-columns: 1fr; }
+    .interpretation-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+    .metrics-grid { grid-template-columns: 1fr; }
+    .clean-core-visual { grid-template-columns: 1fr; }
+    .talent-grid { grid-template-columns: 1fr; }
+    .api-bridge { flex-direction: row; }
+    .stats-inner { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+    .mobile-menu { display: block; }
+    .hero { min-height: auto; padding-top: 6rem; padding-bottom: 3rem; }
+    .hero-inner { padding: 1rem; }
+  }
+
+  @media (max-width: 600px) {
+    .stats-inner { grid-template-columns: 1fr; }
+    .section { padding: 4rem 1.2rem; }
+    .cta-buttons { flex-direction: column; align-items: center; }
+    .talent-stats { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <img src="data:image/png;base64,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" alt="TeGeVe" referrerpolicy="no-referrer" crossorigin="anonymous" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="#contexto">Contexto</a></li>
+      <li><a href="#rutas">Rutas</a></li>
+      <li><a href="#fases">Fases</a></li>
+      <li><a href="#checklist">Auto-diagnóstico</a></li>
+      <li><a href="#tegeve">TeGeVe</a></li>
+      <li><a href="https://tegeve.es/contactanos/" target="_blank" class="nav-cta">¿Hablamos?</a></li>
+    </ul>
+    <button class="mobile-menu" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">Documento exclusivo para CIOs</div>
+      <h1>Framework de<br>Decisión <span>SAP 2026</span></h1>
+      <p class="hero-sub">
+        El mapa de ruta técnico para navegar el fin de soporte de SAP ECC, 
+        evitar los sobrecostes de las grandes consultoras y asegurar la 
+        continuidad operativa de tu negocio.
+      </p>
+      <div class="hero-actions">
+        <a href="https://tegeve.es/contactanos/" target="_blank" class="btn-primary">Solicitar Consultoría →</a>
+        <a href="#checklist" class="btn-secondary">Auto-diagnóstico</a>
+      </div>
+    </div>
+    <div class="hero-card">
+      <h3>TIMELINE CRÍTICO</h3>
+      <div class="timeline-item">
+        <div class="timeline-dot urgent">!</div>
+        <div class="timeline-content">
+          <h4>Mayo 2026 — Fin Compatibility Packs</h4>
+          <p>Sin CPs, no hay parches de seguridad ni correcciones para SAP ECC.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot warning">⚠</div>
+        <div class="timeline-content">
+          <h4>Q3 2026 — Punto de no retorno</h4>
+          <p>Las empresas que no inicien su plan enfrentan escasez de consultores Senior con retrasos de 6-12 meses.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot critical">✕</div>
+        <div class="timeline-content">
+          <h4>Diciembre 2027 — Fin de soporte SAP ECC</h4>
+          <p>Tu SAP ECC queda oficialmente fuera de cobertura de SAP.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar" id="contexto">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-number">+100%</div>
+      <div class="stat-label">Crecimiento en demanda de Arquitectos SAP BTP en 2 años</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">70%</div>
+      <div class="stat-label">De nuevas ofertas SAP exigen BTP e IA</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">+40%</div>
+      <div class="stat-label">Desviación de presupuesto en migraciones "Big 4"</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">60%</div>
+      <div class="stat-label">Del código ABAP personalizado ya no se utiliza</div>
+    </div>
+  </div>
+</div>
+
+<!-- RUTAS -->
+<section class="section section-alt" id="rutas">
+  <div class="section-inner">
+    <div class="section-label">Estrategia de Migración</div>
+    <h2 class="section-title">Las 3 Rutas Estratégicas</h2>
+    <p class="section-desc">
+      El mercado presiona hacia migraciones rápidas. Pero trasladar tu SAP ECC tal cual 
+      (Lift-and-Shift) significa transferir décadas de deuda técnica a infraestructura moderna.
+    </p>
+    <div class="routes-grid">
+      <div class="route-card">
+        <div class="route-percent">25%</div>
+        <div class="route-name">Greenfield</div>
+        <div class="route-type">Reimplantación</div>
+        <p class="route-desc">Empezar de cero. Elimina toda la deuda técnica acumulada. Riesgo: plazos de 18-24 meses que paralizan el negocio. Coste muy elevado.</p>
+      </div>
+      <div class="route-card">
+        <div class="route-percent">30%</div>
+        <div class="route-name">Brownfield</div>
+        <div class="route-type">Conversión técnica</div>
+        <p class="route-desc">Conversión técnica del sistema actual. Rápido, pero perpetúa el Código Z ineficiente y bloquea la innovación futura.</p>
+      </div>
+      <div class="route-card recommended">
+        <div class="route-rec-badge">Recomendado</div>
+        <div class="route-percent">45%</div>
+        <div class="route-name">Bluefield</div>
+        <div class="route-type">Transición Selectiva</div>
+        <p class="route-desc">La nueva norma estratégica. Carve-out lógico: migra solo el histórico de valor. Nace en S/4HANA con un núcleo limpio (Clean Core).</p>
+      </div>
+    </div>
+    <div class="chart-wrapper">
+      <h3>Adopción de Mercado por Estrategia</h3>
+      <div class="chart-container">
+        <canvas id="migrationChart"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BIG 4 -->
+<section class="section section-dark">
+  <div class="section-inner">
+    <div class="section-label">La Realidad del Mercado</div>
+    <h2 class="section-title">El Espejismo de las "Big 4"</h2>
+    <p class="section-desc">
+      La pirámide invertida: la diferencia entre lo que pagas y lo que realmente recibes 
+      en los grandes integradores.
+    </p>
+    <div class="compare-grid">
+      <div class="compare-card what-pay">
+        <h3>Lo que Pagas</h3>
+        <ul class="compare-list">
+          <li>Arquitectura estratégica de primer nivel</li>
+          <li>Promesas de "Zero Technical Debt"</li>
+          <li>Enfoque "AI-First" y transformación digital</li>
+          <li>Equipo de consultores experimentados</li>
+        </ul>
+      </div>
+      <div class="compare-card what-get">
+        <h3>Lo que Recibes</h3>
+        <ul class="compare-list">
+          <li>Equipos masivos de perfiles Junior</li>
+          <li>Tu entorno usado como campo de entrenamiento</li>
+          <li>Metodologías burocráticas interminables</li>
+          <li>Ecosistemas bloqueados (Vendor Lock-in)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="impact-banner">
+      +40% desviación de presupuesto &nbsp;|&nbsp; Metodologías eternas &nbsp;|&nbsp; Vendor Lock-in
+    </div>
+  </div>
+</section>
+
+<!-- CLEAN CORE -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label">Arquitectura Objetivo</div>
+    <h2 class="section-title">La Verdadera Promesa del Clean Core</h2>
+    <p class="section-desc">
+      Un ERP no es un lienzo para desarrollos a medida. La filosofía Clean Core 
+      separa el núcleo estable de la innovación en BTP.
+    </p>
+    <div class="clean-core-visual">
+      <div class="core-box s4">
+        <h3>Núcleo S/4HANA</h3>
+        <p>Intocable. Estable. Actualizaciones sin fricción. Prohibido el Código Z. El 80% de tus procesos deben ser estándar.</p>
+      </div>
+      <div class="api-bridge">
+        <span>API</span>
+        <div class="api-dots">
+          <i></i><i></i><i></i><i></i><i></i>
+        </div>
+      </div>
+      <div class="core-box btp">
+        <h3>SAP BTP</h3>
+        <p>El motor de innovación. Extensiones Side-by-side. Apps Fiori personalizadas, IA (SAP Joule) y automatización.</p>
+      </div>
+    </div>
+    <div class="principle-box">
+      <p>Principio fundamental: Si tocas el Core, hipotecas tu futuro.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CRISIS TALENTO -->
+<section class="section section-dark" id="talento">
+  <div class="section-inner">
+    <div class="section-label">La Restricción Mayor</div>
+    <h2 class="section-title">La Crisis Estructural de Talento SAP</h2>
+    <p class="section-desc">
+      El mercado no carece de consultores; carece de experiencia real. 
+      La escasez extrema retrasa los Go-Live y las grandes consultoras responden con factorías offshore.
+    </p>
+    <div class="talent-grid">
+      <div>
+        <div class="talent-stats">
+          <div class="talent-stat-card">
+            <div class="ts-number" style="color:var(--red)">+100%</div>
+            <div class="ts-label">Crecimiento demanda Arquitectos SAP BTP (2 años)</div>
+          </div>
+          <div class="talent-stat-card">
+            <div class="ts-number" style="color:#ff6b6b">70%</div>
+            <div class="ts-label">Ofertas exigen BTP e IA (base ECC obsoleta)</div>
+          </div>
+        </div>
+        <div style="background:rgba(227,6,19,0.08); border-left:4px solid var(--red); padding:1.2rem 1.5rem; border-radius:0 8px 8px 0;">
+          <p style="font-size:0.9rem; color:rgba(255,255,255,0.7); line-height:1.6;">
+            <strong style="color:white">Modelo TeGeVe:</strong> Hiper-especialización. Perfiles puramente Senior. Validados por ex-CIOs, no solo por RRHH. Nearshore a España: misma zona horaria, cero barreras culturales.
+          </p>
+        </div>
+      </div>
+      <div class="chart-wrapper" style="margin-top:0">
+        <h3>Gap del Mercado: Oferta vs. Demanda</h3>
+        <div class="chart-container-bar">
+          <canvas id="talentGapChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FASES -->
+<section class="section section-alt" id="fases">
+  <div class="section-inner">
+    <div class="section-label">Hoja de Ruta</div>
+    <h2 class="section-title">Fases de Migración</h2>
+    <p class="section-desc">
+      Un enfoque estructurado en dos fases: limpiar antes de migrar, 
+      y estabilizar para innovar.
+    </p>
+    <div class="phase-grid">
+      <div class="phase-card">
+        <div class="phase-number">01</div>
+        <h3>Pre-Migración</h3>
+        <div class="phase-sub">Auditoría y Deuda Técnica</div>
+        <ul class="phase-steps">
+          <li><span class="step-tag keep">Keep</span>Refactorizar el código que aporta ventaja competitiva real a ABAP Cloud.</li>
+          <li><span class="step-tag drop">Drop</span>Eliminar código obsoleto o cubierto por el estándar S/4HANA. Reduce coste hasta un 30%.</li>
+          <li><span class="step-tag decouple">Decouple</span>Mover integraciones periféricas a SAP BTP antes de migrar para limpiar el núcleo.</li>
+        </ul>
+      </div>
+      <div class="phase-card">
+        <div class="phase-number">02</div>
+        <h3>Estabilización</h3>
+        <div class="phase-sub">Clean Core y Adopción</div>
+        <ul class="phase-steps">
+          <li><span class="step-tag clean">Clean Core</span>Prohibido tocar el Core. Toda customización como extensión Side-by-side en BTP.</li>
+          <li><span class="step-tag ux">UX</span>Despliegue acelerado de apps SAP Fiori para alinear tecnología con usabilidad.</li>
+          <li><span class="step-tag ams">AMS</span>Sustitución del soporte reactivo por un modelo predictivo en integraciones limpias.</li>
+          <li><span class="step-tag finops">FinOps</span>Gobernanza BTP bajo principios FinOps. Monitorización de consumo de APIs.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKLIST -->
+<section class="section section-dark" id="checklist">
+  <div class="section-inner">
+    <div class="section-label">Auto-Diagnóstico</div>
+    <h2 class="section-title">Checklist de Decisión</h2>
+    <p class="section-desc">
+      Responde estas preguntas antes de firmar con cualquier integrador.
+    </p>
+    <div class="checklist-counter" id="checkCounter">
+      <div class="count-number" id="countNumber">0</div>
+      <div class="count-label">de 16 respuestas SÍ</div>
+    </div>
+    <div class="checklist-categories">
+      <div class="checklist-cat">
+        <h4>Deuda Técnica</h4>
+        <ul>
+          <li><input type="checkbox" class="check-input" onchange="updateChecklist()">¿Conoces el volumen real de Código Z en tu sistema?</li>
+          <li><input type="checkbox" class="check-input" onchange="updateChecklist()">¿Sabes qué porcentaje de código personalizado está en uso activo?</li>
+          <li><input type="checkbox" class="check-input" onchange="updateChecklist()">¿Has identificado qué desarrollos son diferenciadores vs. estándar?</li>
+          <li><input type="checkbox" class="check-input" onchange="updateChecklist()">¿Tienes un plan para remediar incompatibilidades con HANA?</li>
+        </ul>
+      </div>
+      <div class="checklist-cat">
+        <h4>Estrategia de Migración</h4>
+        <ul>
+          <li><input type="checkbox" class="check-input" onchange="updateChecklist()">¿Has evaluado las 3 rutas (Greenfield/Brownfield/Bluefield)?</li>
+          <li><input type="checkbox" class="check-input" onchange="updateChecklist()">¿Tu integrador te ha presentado un triaje de Código Z antes de presupuestar?</li>
+          <li><input type="checkbox" class="check-input" onchange="updateChecklist()">¿Tienes visibilidad real del TCO de la migración a 3 años?</li>
+          <li><input type="checkbox" class="check-input" onchange="updateChecklist()">¿Has considerado el riesgo de Vendor Lock-in?</li>
+        </ul>
+      </div>
+      <div class="checklist-cat">
+        <h4>Clean Core y BTP</h4>
+        <ul>
+          <li><input type="checkbox" class="check-input" onchange="updateChecklist()">¿Tu arquitectura post-migración respeta los principios de Clean Core?</li>
+          <li><input type="checkbox" class="check-input" onchange="updateChecklist()">¿Tienes gobernanza definida para el consumo de servicios en BTP?</li>
+          <li><input type="checkbox" class="check-input" onchange="updateChecklist()">¿Has presupuestado los costes OpEx de BTP (FinOps)?</li>
+          <li><input type="checkbox" class="check-input" onchange="updateChecklist()">¿Las extensiones se diseñan Side-by-side o tocan el Core?</li>
+        </ul>
+      </div>
+      <div class="checklist-cat">
+        <h4>Talento y Ejecución</h4>
+        <ul>
+          <li><input type="checkbox" class="check-input" onchange="updateChecklist()">¿Los perfiles asignados a tu proyecto son realmente Senior?</li>
+          <li><input type="checkbox" class="check-input" onchange="updateChecklist()">¿Quién valida técnicamente al equipo del integrador?</li>
+          <li><input type="checkbox" class="check-input" onchange="updateChecklist()">¿Tienes un plan B ante la escasez de talento SAP?</li>
+          <li><input type="checkbox" class="check-input" onchange="updateChecklist()">¿Tu timeline contempla la realidad del mercado de talento?</li>
+        </ul>
+      </div>
+    </div>
+    <div class="interpretation-grid">
+      <div class="interp-card green" id="interpGreen">
+        <h5>12–16 SÍ</h5>
+        <p>Tu organización está bien preparada para la migración.</p>
+      </div>
+      <div class="interp-card yellow" id="interpYellow">
+        <h5>8–11 SÍ</h5>
+        <p>Hay brechas críticas. Necesitas asesoría técnica independiente. Riesgo alto.</p>
+      </div>
+      <div class="interp-card red-i active" id="interpRed">
+        <h5>0–7 SÍ</h5>
+        <p>No firmes con ningún integrador antes de auditar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEGEVE -->
+<section class="section" id="tegeve">
+  <div class="section-inner">
+    <div class="section-label">Quién es TeGeVe</div>
+    <h2 class="section-title">Experiencia, No Aprendizaje</h2>
+    <p class="section-desc">
+      +30 años de experiencia en consultoría tecnológica. Proyectos en más de 16 países. 
+      Perfiles validados técnicamente por ex-CIOs.
+    </p>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon red-bg">⚡</div>
+        <h4>Inyección Sin Fricción</h4>
+        <p>Squads de alto rendimiento listos en menos de 15 días. Arquitectos que resuelven problemas complejos en semanas, no meses.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon gray-bg">🔧</div>
+        <h4>Clean-up as a Service</h4>
+        <p>Repositorios de código remediados y listos para sandbox. Precio cerrado por objeto. Auditoría automatizada con IA.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon red-bg">🛡</div>
+        <h4>Independencia del Vendor</h4>
+        <p>No vendemos licencias. Nuestro único incentivo: reducir tu TCO y maximizar la agilidad operativa. Sin Subscription Sprawl.</p>
+      </div>
+    </div>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-value">-20%</div>
+        <div class="metric-label">Downtime minimizado en cada fase</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">+30%</div>
+        <div class="metric-label">Integraciones limpias desde el día uno</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">0%</div>
+        <div class="metric-label">Deuda técnica oculta. Código auditado.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contacto">
+  <div class="cta-inner">
+    <h2>Tu Migración No<br>Puede Esperar <span>a 2027</span></h2>
+    <p>Construyamos un núcleo limpio, ágil y libre de burocracia.</p>
+    <a href="https://tegeve.es/contactanos/" target="_blank" class="btn-primary">Solicitar Consultoría →</a>
+    <div class="cta-buttons">
+      <a href="https://wa.me/34615600707?text=Hola%20Gabriel%2C%20me%20interesa%20el%20Framework%20SAP%202026%20de%20TeGeVe" target="_blank" class="btn-whatsapp">💬 Escríbeme un WhatsApp</a>
+      <a id="btnEmail" href="#" class="btn-email">✉ Escríbeme un Email</a>
+    </div>
+    <div class="cta-contact" style="margin-top:1.8rem">
+      <strong style="color:white">Gabriel Grosso</strong> · Director TeGeVe España<br>
+      <a href="https://www.tegeve.es" target="_blank">www.tegeve.es</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>Documento confidencial · TeGeVe · TGV Group © 2026 · <a href="https://www.tegeve.es">www.tegeve.es</a> · +34 615 60 07 07</p>
+  <p style="margin-top:0.5rem;">Partners: SAP | Oracle | IBM · Presencia en España · Estados Unidos · México · Argentina</p>
+</footer>
+
+<script>
+// Email button - built dynamically to avoid encoding
+(function(){
+  var u = 'ggrosso';
+  var d = 'tegevem.es';
+  var addr = u + '@' + d;
+  var btn = document.getElementById('btnEmail');
+  if(btn){
+    btn.href = 'mai' + 'lto:' + addr + '?subject=Consulta%20Framework%20SAP%202026%20TeGeVe';
+  }
+})();
+
+// Checklist interactivo
+function updateChecklist() {
+  var checks = document.querySelectorAll('.check-input');
+  var count = 0;
+  for (var i = 0; i < checks.length; i++) {
+    var li = checks[i].parentElement;
+    if (checks[i].checked) {
+      count++;
+      li.classList.add('checked');
+    } else {
+      li.classList.remove('checked');
+    }
+  }
+  document.getElementById('countNumber').textContent = count;
+  var green = document.getElementById('interpGreen');
+  var yellow = document.getElementById('interpYellow');
+  var red = document.getElementById('interpRed');
+  green.classList.remove('active');
+  yellow.classList.remove('active');
+  red.classList.remove('active');
+  if (count >= 12) {
+    green.classList.add('active');
+  } else if (count >= 8) {
+    yellow.classList.add('active');
+  } else {
+    red.classList.add('active');
+  }
+}
+
+// Chart.js - Configuracion global
+Chart.defaults.color = '#999';
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+
+// Doughnut - Estrategias de Migracion
+var ctxMig = document.getElementById('migrationChart');
+if (ctxMig) {
+  new Chart(ctxMig.getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Bluefield (Transicion Selectiva)', 'Brownfield (Conversion)', 'Greenfield (Reimplantacion)'],
+      datasets: [{
+        data: [45, 30, 25],
+        backgroundColor: ['#e30613', '#6a6a69', '#b8050f'],
+        borderColor: '#1a1a19',
+        borderWidth: 4,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            padding: 16,
+            usePointStyle: true,
+            pointStyle: 'circle',
+            font: { size: 12, weight: '600' },
+            color: '#ffffff'
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(26,26,25,0.95)',
+          titleColor: '#fff',
+          bodyColor: '#ccc',
+          borderColor: 'rgba(227,6,19,0.4)',
+          borderWidth: 1,
+          padding: 12
+        }
+      },
+      cutout: '68%'
+    }
+  });
+}
+
+// Bar horizontal - Crisis de Talento
+var ctxTal = document.getElementById('talentGapChart');
+if (ctxTal) {
+  new Chart(ctxTal.getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['Demanda Nuevos Skills (BTP/IA)', 'Oferta Tradicional (Base ECC)'],
+      datasets: [{
+        label: 'Impacto Mercado (%)',
+        data: [70, 30],
+        backgroundColor: ['#e30613', '#6a6a69'],
+        borderRadius: 4,
+        barPercentage: 0.55
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          ticks: {
+            callback: function(v){ return v + '%'; },
+            color: '#999'
+          },
+          max: 100
+        },
+        y: {
+          grid: { display: false },
+          ticks: {
+            font: { weight: '600', size: 12 },
+            color: '#ffffff'
+          }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(26,26,25,0.95)',
+          titleColor: '#fff',
+          bodyColor: '#ccc',
+          borderColor: 'rgba(227,6,19,0.4)',
+          borderWidth: 1,
+          callbacks: {
+            label: function(ctx){ return ctx.parsed.x + '% del mercado'; }
+          }
+        }
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>
