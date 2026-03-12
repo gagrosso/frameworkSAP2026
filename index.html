@@ -2,11 +2,18 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Framework de Decisión SAP 2026 | TeGeVe</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
+  html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
   :root {
     --red: #e30613;
     --red-dark: #b8050f;
@@ -109,10 +116,13 @@
   .hero {
     position: relative;
     min-height: 100vh;
+    min-height: 100dvh;
     background: var(--bg-hero);
     display: flex;
     align-items: center;
+    justify-content: center;
     overflow: hidden;
+    padding-top: 100px;
   }
 
   .hero::before {
@@ -146,13 +156,24 @@
     max-width: 1200px;
     width: 100%;
     margin: 0 auto;
-    padding: 7rem 2rem 3rem;
+    padding: 2rem;
     position: relative;
     z-index: 2;
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
     gap: 4rem;
     align-items: center;
+  }
+
+  /* Scale up for very large screens */
+  @media (min-width: 1600px) {
+    .hero-inner, .section-inner, .stats-inner, .nav-inner, .cta-inner {
+      max-width: 1400px;
+    }
+    .hero h1 { font-size: 6rem; }
+    .hero-sub { font-size: 1.25rem; }
+    .section-title { font-size: 3.8rem; }
+    .stat-number { font-size: 3.5rem; }
   }
 
   .hero-badge {
@@ -1198,12 +1219,12 @@
     .nav-links { display: none; }
     .mobile-menu { display: block; }
     .hero { min-height: auto; padding-top: 6rem; padding-bottom: 3rem; }
+    .hero-inner { padding: 1rem; }
   }
 
   @media (max-width: 600px) {
     .stats-inner { grid-template-columns: 1fr; }
     .section { padding: 4rem 1.2rem; }
-    .hero-inner { padding: 2rem 1.2rem; }
     .cta-buttons { flex-direction: column; align-items: center; }
     .talent-stats { grid-template-columns: 1fr; }
   }
