@@ -144,8 +144,9 @@
 
   .hero-inner {
     max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
-    padding: 8rem 2rem 5rem;
+    padding: 7rem 2rem 3rem;
     position: relative;
     z-index: 2;
     display: grid;
@@ -1191,16 +1192,20 @@
     .services-grid { grid-template-columns: 1fr; }
     .metrics-grid { grid-template-columns: 1fr; }
     .clean-core-visual { grid-template-columns: 1fr; }
+    .talent-grid { grid-template-columns: 1fr; }
     .api-bridge { flex-direction: row; }
     .stats-inner { grid-template-columns: 1fr 1fr; }
     .nav-links { display: none; }
     .mobile-menu { display: block; }
+    .hero { min-height: auto; padding-top: 6rem; padding-bottom: 3rem; }
   }
 
   @media (max-width: 600px) {
     .stats-inner { grid-template-columns: 1fr; }
     .section { padding: 4rem 1.2rem; }
-    .hero-inner { padding: 7rem 1.2rem 3rem; }
+    .hero-inner { padding: 2rem 1.2rem; }
+    .cta-buttons { flex-direction: column; align-items: center; }
+    .talent-stats { grid-template-columns: 1fr; }
   }
 </style>
 </head>
